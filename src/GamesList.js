@@ -2,6 +2,7 @@ import React from 'react';
 import GameCard from './GameCard';
 
 export default function GamesList({ games }) {
+
   const emptyMessage = (
     <p>There are no games yet in your collection.</p>
   );
