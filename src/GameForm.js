@@ -2,15 +2,30 @@ import React, { Component } from 'react';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
-import { saveGame } from './actions';
+import { saveGame, fetchGame } from './actions';
 
 class GameForm extends Component {
   state = {
-    title: '',
-    cover: '',
+    _id: this.props.game ? this.props.game._id : null,
+    title: this.props.game ? this.props.game.title : '',
+    cover: this.props.game ? this.props.game.cover : '',
     errors: {},
     loading: false,
     done: false
+  }
+
+  componentDidMount = () => {
+      if (this.props.params._id) {
+        this.props.fetchGame(this.props.params._id);
+      }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      _id: nextProps.game._id,
+      title: nextProps.game.title,
+      cover: nextProps.game.cover, 
+    });
   }
 
   // Matching state to form names reduces work significantly.
@@ -99,4 +114,14 @@ class GameForm extends Component {
 
 }
 
-export default connect(null, { saveGame })(GameForm);
+function mapStateToProps(state, props) {
+  if (props.params._id) {
+    return {
+      game: state.games.find(item => item._id === props.params._id)
+    }
+  }
+
+  return { game: null }
+}
+
+export default connect(mapStateToProps, { saveGame, fetchGame })(GameForm);
