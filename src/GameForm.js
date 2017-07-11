@@ -10,8 +10,6 @@ class GameForm extends Component {
     loading: false,
   }
 
-
-
   componentWillReceiveProps(nextProps) {
     this.setState({
       _id: nextProps.game._id,
